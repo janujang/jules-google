@@ -1,10 +1,23 @@
-import React from 'react';
+import React from "react";
 
 const Header = () => {
   return (
-    <div style={{ padding: '10px', backgroundColor: '#f0f0f0', textAlign: 'center' }}>
-      <h1>Workflow Diagramming Tool</h1>
-    </div>
+    <header className="header">
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <h1>Workflow Designer</h1>
+        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+          <span style={{ color: "var(--text-secondary)", fontSize: "0.9rem" }}>
+            Workspace
+          </span>
+        </div>
+      </div>
+    </header>
   );
 };
 

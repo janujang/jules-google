@@ -1,24 +1,40 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import Header from './components/Header';
-import Toolbar from './components/Toolbar';
-import WorkflowCanvas from './components/WorkflowCanvas';
-import { applyNodeChanges, applyEdgeChanges, addEdge } from 'reactflow';
-import './App.css';
+import React, { useState, useCallback, useEffect } from "react";
+import Header from "./components/Header";
+import Toolbar from "./components/Toolbar";
+import WorkflowCanvas from "./components/WorkflowCanvas";
+import { applyNodeChanges, applyEdgeChanges, addEdge } from "reactflow";
+import "./App.css";
 
-const API_BASE_URL = 'http://localhost:3001/api';
+const API_BASE_URL = "http://localhost:3001/api";
 
 // Fallback initial state if API fetch fails
 const fallbackInitialWorkflows = {
   main: {
     nodes: [
-      { id: 'node-1', data: { label: 'Fallback Main - Step 1' }, position: { x: 100, y: 100 }, type: 'default' },
-      { id: 'node-2', data: { label: 'Fallback Sub-Workflow Node' }, position: { x: 300, y: 100 }, type: 'default', subWorkflowId: 'subWorkflow1' },
+      {
+        id: "node-1",
+        data: { label: "Fallback Main - Step 1" },
+        position: { x: 100, y: 100 },
+        type: "default",
+      },
+      {
+        id: "node-2",
+        data: { label: "Fallback Sub-Workflow Node" },
+        position: { x: 300, y: 100 },
+        type: "default",
+        subWorkflowId: "subWorkflow1",
+      },
     ],
-    edges: [{ id: 'edge-1-2', source: 'node-1', target: 'node-2' }],
+    edges: [{ id: "edge-1-2", source: "node-1", target: "node-2" }],
   },
   subWorkflow1: {
     nodes: [
-      { id: 'sub-node-1', data: { label: 'Fallback Sub - Step A' }, position: { x: 100, y: 150 }, type: 'default' },
+      {
+        id: "sub-node-1",
+        data: { label: "Fallback Sub - Step A" },
+        position: { x: 100, y: 150 },
+        type: "default",
+      },
     ],
     edges: [],
   },
@@ -39,27 +55,31 @@ function App() {
         setError(null);
         const response = await fetch(`${API_BASE_URL}/workflows`);
         if (!response.ok) {
-          throw new Error(`Failed to fetch workflows: ${response.status} ${response.statusText}`);
+          throw new Error(
+            `Failed to fetch workflows: ${response.status} ${response.statusText}`
+          );
         }
         const data = await response.json();
         if (Object.keys(data).length === 0) {
           // If backend returns empty, use fallback
           setWorkflows(fallbackInitialWorkflows);
-          setCurrentWorkflowId('main');
-          setHistory(['main']);
-          setError('No workflows found on server, loaded fallback data.');
+          setCurrentWorkflowId("main");
+          setHistory(["main"]);
+          setError("No workflows found on server, loaded fallback data.");
         } else {
           setWorkflows(data);
-          const firstWorkflowId = Object.keys(data)[0] || 'main'; // Default to 'main' or first available
+          const firstWorkflowId = Object.keys(data)[0] || "main"; // Default to 'main' or first available
           setCurrentWorkflowId(firstWorkflowId);
           setHistory([firstWorkflowId]);
         }
       } catch (err) {
         console.error("Fetch error:", err);
-        setError(`Error fetching workflows: ${err.message}. Using fallback data.`);
+        setError(
+          `Error fetching workflows: ${err.message}. Using fallback data.`
+        );
         setWorkflows(fallbackInitialWorkflows);
-        setCurrentWorkflowId('main'); // Fallback to 'main'
-        setHistory(['main']);
+        setCurrentWorkflowId("main"); // Fallback to 'main'
+        setHistory(["main"]);
       } finally {
         setLoading(false);
       }
@@ -67,14 +87,17 @@ function App() {
     fetchWorkflows();
   }, []);
 
-  const navigateToWorkflow = useCallback((workflowId) => {
-    if (workflows[workflowId]) {
-      setCurrentWorkflowId(workflowId);
-      setHistory((prevHistory) => [...prevHistory, workflowId]);
-    } else {
-      alert(`Workflow "${workflowId}" not found.`);
-    }
-  }, [workflows]);
+  const navigateToWorkflow = useCallback(
+    (workflowId) => {
+      if (workflows[workflowId]) {
+        setCurrentWorkflowId(workflowId);
+        setHistory((prevHistory) => [...prevHistory, workflowId]);
+      } else {
+        alert(`Workflow "${workflowId}" not found.`);
+      }
+    },
+    [workflows]
+  );
 
   const navigateBack = useCallback(() => {
     if (history.length > 1) {
@@ -86,7 +109,10 @@ function App() {
     }
   }, [history]);
 
-  const currentWorkflow = workflows[currentWorkflowId] || { nodes: [], edges: [] };
+  const currentWorkflow = workflows[currentWorkflowId] || {
+    nodes: [],
+    edges: [],
+  };
 
   const onNodesChange = useCallback(
     (changes) => {
@@ -95,7 +121,10 @@ function App() {
         ...prevWorkflows,
         [currentWorkflowId]: {
           ...prevWorkflows[currentWorkflowId],
-          nodes: applyNodeChanges(changes, prevWorkflows[currentWorkflowId]?.nodes || []),
+          nodes: applyNodeChanges(
+            changes,
+            prevWorkflows[currentWorkflowId]?.nodes || []
+          ),
         },
       }));
     },
@@ -109,7 +138,10 @@ function App() {
         ...prevWorkflows,
         [currentWorkflowId]: {
           ...prevWorkflows[currentWorkflowId],
-          edges: applyEdgeChanges(changes, prevWorkflows[currentWorkflowId]?.edges || []),
+          edges: applyEdgeChanges(
+            changes,
+            prevWorkflows[currentWorkflowId]?.edges || []
+          ),
         },
       }));
     },
@@ -123,7 +155,10 @@ function App() {
         ...prevWorkflows,
         [currentWorkflowId]: {
           ...prevWorkflows[currentWorkflowId],
-          edges: addEdge(connection, prevWorkflows[currentWorkflowId]?.edges || []),
+          edges: addEdge(
+            connection,
+            prevWorkflows[currentWorkflowId]?.edges || []
+          ),
         },
       }));
     },
@@ -132,11 +167,13 @@ function App() {
 
   const addNode = useCallback(() => {
     if (!currentWorkflowId) return;
-    const newNodeId = `node_${currentWorkflowId}_${Math.random().toString(36).substr(2, 9)}`;
+    const newNodeId = `node_${currentWorkflowId}_${Math.random()
+      .toString(36)
+      .substr(2, 9)}`;
     const newNode = {
       id: newNodeId,
-      type: 'default',
-      data: { label: 'New Task' },
+      type: "default",
+      data: { label: "New Task" },
       position: { x: Math.random() * 400, y: Math.random() * 400 },
     };
     setWorkflows((prevWorkflows) => ({
@@ -150,7 +187,7 @@ function App() {
 
   const saveCurrentWorkflow = useCallback(async () => {
     if (!currentWorkflowId || !workflows[currentWorkflowId]) {
-      alert('No active workflow to save.');
+      alert("No active workflow to save.");
       return;
     }
     try {
@@ -158,19 +195,24 @@ function App() {
         nodes: workflows[currentWorkflowId].nodes,
         edges: workflows[currentWorkflowId].edges,
       };
-      const response = await fetch(`${API_BASE_URL}/workflows/${currentWorkflowId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
+      const response = await fetch(
+        `${API_BASE_URL}/workflows/${currentWorkflowId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || `Failed to save workflow: ${response.status}`);
+        throw new Error(
+          errorData.message || `Failed to save workflow: ${response.status}`
+        );
       }
       const result = await response.json();
-      alert(result.message || 'Workflow saved successfully!');
+      alert(result.message || "Workflow saved successfully!");
     } catch (err) {
       console.error("Save error:", err);
       alert(`Error saving workflow: ${err.message}`);
@@ -178,19 +220,61 @@ function App() {
   }, [currentWorkflowId, workflows]);
 
   if (loading) {
-    return <div style={{ textAlign: 'center', padding: '20px' }}>Loading workflows...</div>;
+    return (
+      <div className="loading-state">
+        <div>
+          <div style={{ marginBottom: "12px" }}>Loading workflows...</div>
+          <div
+            style={{
+              height: "2px",
+              backgroundColor: "var(--border-color)",
+              borderRadius: "2px",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                height: "100%",
+                width: "30%",
+                backgroundColor: "var(--primary-color)",
+                animation: "loading 1s infinite linear",
+              }}
+            />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
       <Header />
-      {error && <div style={{ color: 'red', textAlign: 'center', padding: '10px' }}>{error}</div>}
+      {error && (
+        <div className="error-message">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path
+              d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM11 15H9V13H11V15ZM11 11H9V5H11V11Z"
+              fill="currentColor"
+            />
+          </svg>
+          {error}
+        </div>
+      )}
       {history.length > 1 && (
-        <button onClick={navigateBack} style={{ margin: '10px', padding: '5px 10px', alignSelf: 'flex-start' }}>
+        <button onClick={navigateBack} className="back-button">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path
+              d="M15 8H1M1 8L8 15M1 8L8 1"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
           Back
         </button>
       )}
-      <div style={{ display: 'flex', flexGrow: 1 }}>
+      <div style={{ display: "flex", flexGrow: 1 }}>
         <Toolbar addNode={addNode} saveWorkflow={saveCurrentWorkflow} />
         {currentWorkflowId && workflows[currentWorkflowId] ? (
           <WorkflowCanvas
@@ -203,8 +287,10 @@ function App() {
             navigateToWorkflow={navigateToWorkflow}
           />
         ) : (
-          <div style={{ flexGrow: 1, textAlign: 'center', padding: '20px' }}>
-            {currentWorkflowId ? `Workflow "${currentWorkflowId}" not found or empty.` : 'No workflow selected.'}
+          <div style={{ flexGrow: 1, textAlign: "center", padding: "20px" }}>
+            {currentWorkflowId
+              ? `Workflow "${currentWorkflowId}" not found or empty.`
+              : "No workflow selected."}
           </div>
         )}
       </div>

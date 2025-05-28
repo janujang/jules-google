@@ -7,26 +7,87 @@
 .app-container {
   display: flex;
   flex-grow: 1;
+  background-color: var(--surface-color);
 }
 
 .toolbar {
-  width: 200px;
-  background-color: #e0e0e0;
-  padding: 10px;
-  border-right: 1px solid #ccc;
+  width: 250px;
+  background-color: white;
+  padding: 20px;
+  border-right: 1px solid var(--border-color);
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 1;
 }
 
 .workflow-canvas {
   flex-grow: 1;
-  border: 1px solid black;
-  padding: 10px;
-  background-color: #f9f9f9;
+  background-color: var(--surface-color);
+  position: relative;
 }
 
-/* Placeholder styling for Header */
+.workflow-canvas .react-flow__node {
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.workflow-canvas .react-flow__node:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.workflow-canvas .react-flow__edge {
+  transition: stroke 0.2s ease;
+}
+
+.workflow-canvas .react-flow__edge:hover {
+  stroke: var(--primary-color) !important;
+}
+
+/* Header styling */
 .header {
-  padding: 10px;
-  background-color: #f0f0f0;
-  text-align: center;
-  border-bottom: 1px solid #ccc;
+  padding: 16px 24px;
+  background-color: white;
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.header h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* Error message styling */
+.error-message {
+  background-color: #fee2e2;
+  color: var(--error-color);
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Loading state */
+.loading-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  color: var(--text-secondary);
+}
+
+/* Back button */
+.back-button {
+  margin: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
 }
