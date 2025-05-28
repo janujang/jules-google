@@ -261,7 +261,7 @@ function App() {
           Back
         </button>
       )}
-      <div className="flex flex-1">
+      <div className="flex flex-1 relative">
         <Toolbar addNode={addNode} saveWorkflow={saveCurrentWorkflow} />
         {currentWorkflowId && workflows[currentWorkflowId] ? (
           <WorkflowCanvas
