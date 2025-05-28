@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import Header from "./components/Header";
 import Toolbar from "./components/Toolbar";
 import WorkflowCanvas from "./components/WorkflowCanvas";
+import { ArrowLeft } from 'lucide-react';
 import { applyNodeChanges, applyEdgeChanges, addEdge } from "reactflow";
 const API_BASE_URL = "http://localhost:3001/api";
 
@@ -249,15 +250,7 @@ function App() {
           onClick={navigateBack}
           className="inline-flex items-center gap-2 m-4 px-3 py-2 text-sm text-gray-700 hover:text-gray-900 transition-colors"
         >
-          <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none">
-            <path
-              d="M15 8H1M1 8L8 15M1 8L8 1"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <ArrowLeft className="w-4 h-4" />
           Back
         </button>
       )}
