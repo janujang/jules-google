@@ -2,36 +2,22 @@ import React from "react";
 
 const Toolbar = ({ addNode, saveWorkflow }) => {
   return (
-    <div className="toolbar">
-      <h2
-        style={{
-          fontSize: "1rem",
-          color: "var(--text-secondary)",
-          marginTop: 0,
-          marginBottom: "16px",
-        }}
+    <div className="w-64 bg-white border-r border-gray-200 p-5 flex flex-col gap-3 shadow-sm z-10">
+      <h2 className="text-sm font-medium text-gray-500 mb-2">Tools</h2>
+      <button
+        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        onClick={addNode}
       >
-        Tools
-      </h2>
-      <button className="primary" onClick={addNode}>
         Add Task Node
       </button>
-      <button onClick={saveWorkflow}>Save Workflow</button>
-      <div
-        style={{
-          marginTop: "auto",
-          borderTop: "1px solid var(--border-color)",
-          paddingTop: "16px",
-        }}
+      <button
+        className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+        onClick={saveWorkflow}
       >
-        <span
-          style={{
-            fontSize: "0.8rem",
-            color: "var(--text-secondary)",
-            display: "block",
-            marginBottom: "8px",
-          }}
-        >
+        Save Workflow
+      </button>
+      <div className="mt-auto pt-4 border-t border-gray-200">
+        <span className="text-xs text-gray-500 block">
           Tip: Double-click a node to explore sub-workflows
         </span>
       </div>

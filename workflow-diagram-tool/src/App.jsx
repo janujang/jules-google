@@ -3,8 +3,6 @@ import Header from "./components/Header";
 import Toolbar from "./components/Toolbar";
 import WorkflowCanvas from "./components/WorkflowCanvas";
 import { applyNodeChanges, applyEdgeChanges, addEdge } from "reactflow";
-import "./App.css";
-
 const API_BASE_URL = "http://localhost:3001/api";
 
 // Fallback initial state if API fetch fails
@@ -221,25 +219,11 @@ function App() {
 
   if (loading) {
     return (
-      <div className="loading-state">
+      <div className="flex items-center justify-center min-h-[200px] text-gray-500">
         <div>
-          <div style={{ marginBottom: "12px" }}>Loading workflows...</div>
-          <div
-            style={{
-              height: "2px",
-              backgroundColor: "var(--border-color)",
-              borderRadius: "2px",
-              overflow: "hidden",
-            }}
-          >
-            <div
-              style={{
-                height: "100%",
-                width: "30%",
-                backgroundColor: "var(--primary-color)",
-                animation: "loading 1s infinite linear",
-              }}
-            />
+          <div className="mb-3">Loading workflows...</div>
+          <div className="h-0.5 bg-gray-200 rounded overflow-hidden">
+            <div className="h-full w-1/3 bg-blue-600 animate-loading-progress" />
           </div>
         </div>
       </div>
@@ -247,11 +231,11 @@ function App() {
   }
 
   return (
-    <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
+    <div className="h-screen flex flex-col">
       <Header />
       {error && (
-        <div className="error-message">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <div className="flex items-center gap-2 p-3 mx-2 mt-2 text-red-600 bg-red-50 rounded-lg">
+          <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none">
             <path
               d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM11 15H9V13H11V15ZM11 11H9V5H11V11Z"
               fill="currentColor"
@@ -261,8 +245,11 @@ function App() {
         </div>
       )}
       {history.length > 1 && (
-        <button onClick={navigateBack} className="back-button">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <button
+          onClick={navigateBack}
+          className="inline-flex items-center gap-2 m-4 px-3 py-2 text-sm text-gray-700 hover:text-gray-900 transition-colors"
+        >
+          <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none">
             <path
               d="M15 8H1M1 8L8 15M1 8L8 1"
               stroke="currentColor"
@@ -274,7 +261,7 @@ function App() {
           Back
         </button>
       )}
-      <div style={{ display: "flex", flexGrow: 1 }}>
+      <div className="flex flex-1">
         <Toolbar addNode={addNode} saveWorkflow={saveCurrentWorkflow} />
         {currentWorkflowId && workflows[currentWorkflowId] ? (
           <WorkflowCanvas
@@ -287,7 +274,7 @@ function App() {
             navigateToWorkflow={navigateToWorkflow}
           />
         ) : (
-          <div style={{ flexGrow: 1, textAlign: "center", padding: "20px" }}>
+          <div className="flex-1 text-center p-5 text-gray-500">
             {currentWorkflowId
               ? `Workflow "${currentWorkflowId}" not found or empty.`
               : "No workflow selected."}
